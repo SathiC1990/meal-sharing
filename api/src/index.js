@@ -50,3 +50,13 @@ app.get('/past-meals', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+//all-meal
+app.get('/all-meals',async(req,res)=>{
+  try{
+    const meals = await knex ('Meal').orderBy('id',"asc");
+    res.json(meals);
+  }catch(error){
+    res.status(500).json({error:error.message});
+  }
+ });
