@@ -60,3 +60,17 @@ app.get('/all-meals',async(req,res)=>{
     res.status(500).json({error:error.message});
   }
  });
+
+
+ //First-meal
+ app.get('/first-meal',async(req,res)=>{
+  try{
+    const meal = await knex ('Meal').orderBy('id',"asc").first();
+    if(!meal){
+      return res.status(404).json({ message: 'No meals available' });
+    }
+    res.json(meal);
+  }catch(error){
+    res.status(500).json({error:error.message});
+  }
+ });
