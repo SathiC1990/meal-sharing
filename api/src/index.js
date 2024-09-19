@@ -40,3 +40,13 @@ app.get('/future-meals', async (req, res) => {
   }
 });
 
+//past-meal
+app.get('/past-meals', async (req, res) => {
+  try {
+    const now = new Date();
+    const meals = await knex('Meal').where('when', '<', now);
+    res.json(meals);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
