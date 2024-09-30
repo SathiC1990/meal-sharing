@@ -29,3 +29,59 @@ app.use("/api", apiRouter);
 app.listen(process.env.PORT, () => {
   console.log(`API listening on port ${process.env.PORT}`);
 });
+//Future-meal
+app.get("/future-meals", async (req, res) => {
+  try {
+    const meals = await knex("meal").where("when", ">", knex.fn.now());
+    res.json(meals);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//past-meal
+app.get("/past-meals", async (req, res) => {
+  try {
+    const now = new Date();
+    const meals = await knex("meal").where("when", "<", now);
+    res.json(meals);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//all-meal
+app.get("/all-meals", async (req, res) => {
+  try {
+    const meals = await knex("Meal").orderBy("id");
+    res.json(meals);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//First-meal
+app.get("/first-meal", async (req, res) => {
+  try {
+    const meal = await knex("meal").orderBy("id").first();
+    if (!meal) {
+      return res.status(404).json({ message: "No meals available" });
+    }
+    res.json(meal);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+//last-meal
+app.get("/last-meal", async (req, res) => {
+  try {
+    const meal = await knex("meal").orderBy("id", "desc").first();
+    if (!meal) {
+      return res.status(404).json({ message: "No meals available" });
+    }
+    res.json(meal);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
